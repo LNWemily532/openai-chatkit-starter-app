@@ -3,11 +3,13 @@ import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 
 const apiTarget = process.env.VITE_API_URL ?? "http://127.0.0.1:8000";
+const isProduction = process.env.NODE_ENV === "production";
 
 export default defineConfig({
   // Allow env files to live one level above the frontend directory
   envDir: path.resolve(__dirname, ".."),
   plugins: [react()],
+  base: isProduction ? "/" : "/",
   server: {
     port: 3000,
     host: "0.0.0.0",
@@ -17,5 +19,10 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    sourcemap: false,
   },
 });

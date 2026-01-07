@@ -1,0 +1,19 @@
+[Unit]
+Description=Managed ChatKit FastAPI Backend
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/sop-chatbot.livelihoodnw.org/backend
+Environment="PATH=/var/www/sop-chatbot.livelihoodnw.org/backend/.venv/bin"
+Environment="ENVIRONMENT=production"
+Environment="NODE_ENV=production"
+EnvironmentFile=/var/www/sop-chatbot.livelihoodnw.org/.env.local
+ExecStart=/var/www/sop-chatbot.livelihoodnw.org/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 4
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

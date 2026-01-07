@@ -16,11 +16,28 @@ DEFAULT_CHATKIT_BASE = "https://api.openai.com"
 SESSION_COOKIE_NAME = "chatkit_session_id"
 SESSION_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30  # 30 days
 
+
+def is_prod() -> bool:
+    env = (os.getenv("ENVIRONMENT") or os.getenv("NODE_ENV") or "").lower()
+    return env == "production"
+
+
 app = FastAPI(title="Managed ChatKit Session API")
+
+# CORS configuration - allow specific origins in production
+cors_origins_env = os.getenv("CORS_ORIGINS", "")
+if cors_origins_env:
+    cors_origins = [origin.strip() for origin in cors_origins_env.split(",")]
+elif is_prod():
+    # In production, restrict to your domain by default
+    cors_origins = ["https://sop-chatbot.livelihoodnw.org"]
+else:
+    # Development: allow all origins
+    cors_origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -108,11 +125,6 @@ def respond(
             path="/",
         )
     return response
-
-
-def is_prod() -> bool:
-    env = (os.getenv("ENVIRONMENT") or os.getenv("NODE_ENV") or "").lower()
-    return env == "production"
 
 
 async def read_json_body(request: Request) -> Mapping[str, Any]:
