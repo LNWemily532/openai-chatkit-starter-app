@@ -11,12 +11,19 @@ export const workflowId = (() => {
 
 export function createClientSecretFetcher(
   workflow: string,
-  endpoint = "/api/create-session"
+  endpoint?: string
 ) {
+  // Use environment variable if set, otherwise default to relative path
+  const apiUrl = import.meta.env.VITE_API_URL || "";
+  const defaultEndpoint = apiUrl 
+    ? `${apiUrl}/api/create-session` 
+    : "/api/create-session";
+  const finalEndpoint = endpoint || defaultEndpoint;
+
   return async (currentSecret: string | null) => {
     if (currentSecret) return currentSecret;
 
-    const response = await fetch(endpoint, {
+    const response = await fetch(finalEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ workflow: { id: workflow } }),

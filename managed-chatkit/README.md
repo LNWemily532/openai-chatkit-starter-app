@@ -33,3 +33,16 @@ same project and organization.
 
 - UI: `frontend/src/components/ChatKitPanel.tsx`
 - Session logic: `backend/app/main.py`
+
+## Security
+
+**🔒 Protect your API keys!** 
+
+- Never commit `.env.local` (it's in `.gitignore`)
+- Use `.env.example` as a template
+- Run `./scripts/check-security.sh` to verify your secrets are protected
+- See `SECURITY.md` for complete security guidelines
+
+## Deployment
+
+See `deploy/DEPLOY.md` for deployment instructions to your server.
