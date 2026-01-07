@@ -1,9 +1,10 @@
-exports.handler = async function () {
+export async function handler() {
     return {
-      statusCode: 500,
+      statusCode: 200,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        error: "create-session function exists but is not wired yet",
+        ok: true,
+        message: "create-session function reached"
       }),
     };
-  };
+  }
